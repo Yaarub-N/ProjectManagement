@@ -1,14 +1,18 @@
-﻿
-namespace Data.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-
-public class ProjectEmployeeEntity
+namespace Data.Entities
 {
-   
-    public int ProjectId { get; set; }
-    public ProjectEntity Project { get; set; } = null!;
+    public class ProjectEmployeeEntity
+    {
+        [Key]
+        [Column(Order = 1)]
+        public int ProjectId { get; set; }
+        public ProjectEntity Project { get; set; } = null!;
 
-  
-    public int EmployeeId { get; set; }
-    public EmployeeEntity Employee { get; set; } = null!;
+        [Key]
+        [Column(Order = 2)]
+        public int EmployeeId { get; set; }
+        public EmployeeEntity Employee { get; set; } = null!;
+    }
 }
