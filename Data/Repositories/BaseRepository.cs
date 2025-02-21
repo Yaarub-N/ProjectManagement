@@ -1,6 +1,4 @@
-﻿
-
-using Data.Context;
+﻿using Data.Context;
 using Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -8,9 +6,7 @@ using System.Linq.Expressions;
 
 namespace Data.Repositories;
 
-
 public class BaseRepository<TEntity>(DataContext context) : IBaseRepository<TEntity> where TEntity : class
-
 {
     protected readonly DataContext _context = context;
     protected readonly DbSet<TEntity> _db = context.Set<TEntity>();
@@ -22,11 +18,9 @@ public class BaseRepository<TEntity>(DataContext context) : IBaseRepository<TEnt
             await _db.AddAsync(entity);
             await _context.SaveChangesAsync();
             return true;
-
         }
         catch (Exception ex)
         {
-
             Debug.WriteLine(ex);
             return false;
         }
@@ -39,15 +33,14 @@ public class BaseRepository<TEntity>(DataContext context) : IBaseRepository<TEnt
             _db.Update(entity);
             await _context.SaveChangesAsync();
             return true;
-
         }
         catch (Exception ex)
         {
-
             Debug.WriteLine(ex);
             return false;
         }
     }
+
     public virtual async Task<bool> RemoveAsync(TEntity entity)
     {
         try
@@ -55,11 +48,9 @@ public class BaseRepository<TEntity>(DataContext context) : IBaseRepository<TEnt
             _db.Remove(entity);
             await _context.SaveChangesAsync();
             return true;
-
         }
         catch (Exception ex)
         {
-
             Debug.WriteLine(ex);
             return false;
         }
@@ -67,24 +58,16 @@ public class BaseRepository<TEntity>(DataContext context) : IBaseRepository<TEnt
 
     public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
     {
-
-        var entities = await _db.ToListAsync();
-        return entities;
-
+        return await _db.ToListAsync();
     }
 
-    public virtual async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> expression)
+    public virtual async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> expression)
     {
-        var entity = await _db.FirstOrDefaultAsync(expression);
-        return entity!;
+        return await _db.FirstOrDefaultAsync(expression);
     }
 
     public virtual async Task<bool> ExsistAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await _db.AnyAsync(predicate);
     }
-
-
-
 }
-
