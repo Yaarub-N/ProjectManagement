@@ -9,7 +9,7 @@ namespace Domain.Factories
 
         public static ProjectDTO ToDTO(ProjectEntity project)
         {
-            // 🟢 Säkerställ att alla relationer har ett standardvärde om de är null
+             //ChatGpt 4o
             var statusName = project.Status?.Name ?? "Unknown Status";
             var customerName = project.Customer?.Profile?.Name ?? "Unknown Customer";
             var serviceName = project.Service?.Name ?? "Unknown Service";
@@ -20,7 +20,7 @@ namespace Domain.Factories
                 ? $"{project.ProjectManager.FirstName} {project.ProjectManager.LastName}"
                 : "No Manager";
 
-            // 🟢 Nu skapar vi `ProjectDTO` med säkrade värden
+         
             return new ProjectDTO
             {
                 ProjectNumber = project.ProjectNumber,
@@ -42,7 +42,7 @@ namespace Domain.Factories
             return projects.Select(ToDTO);
         }
 
-        // 🟢 Konverterar ProjectRegistrationForm → ProjectEntity
+       
         public static ProjectEntity ToEntity(ProjectRegistrationForm projectForm)
         {
             return new ProjectEntity

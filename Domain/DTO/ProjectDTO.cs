@@ -12,5 +12,5 @@ public class ProjectDTO
     public decimal ServiceHourlyRate { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    public string ProjectManagerName { get; set; } = "No Manager";  // ✅ Lägg till denna rad
+    public string ProjectManagerName { get; set; } = "No Manager";  //Chat GPT4o
 }

@@ -27,7 +27,7 @@ namespace Data.Repositories
             .ThenInclude(c => c!.Profile)
         .Include(p => p.Service)
         .Include(p => p.DateRange)
-        .Include(p => p.ProjectManager)  // ✅ Se till att denna rad finns!
+        .Include(p => p.ProjectManager)  
         .FirstOrDefaultAsync();
         }
     }

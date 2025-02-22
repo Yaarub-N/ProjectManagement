@@ -1,4 +1,4 @@
-﻿namespace Data.Repositories
+﻿namespace Data.Entities
 {
     internal interface IProjectEmployeeRepository
     {
