@@ -1,6 +1,9 @@
-﻿namespace Data.Interfaces
+﻿using Data.Entities;
+
+namespace Data.Interfaces
 {
-    internal interface IRoleRepository
+    public interface IRoleRepository : IBaseRepository<RoleEntity>
+    {
     {
     }
 }

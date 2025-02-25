@@ -13,3 +13,4 @@ public class TaskEntity
     public int ProjectId { get; set; }
     public ProjectEntity Project { get; set; } = null!;
 }
+

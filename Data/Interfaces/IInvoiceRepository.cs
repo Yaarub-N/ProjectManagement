@@ -1,6 +1,8 @@
-﻿namespace Data.Interfaces
+﻿using Data.Entities;
+
+namespace Data.Interfaces
 {
-    internal interface IInvoiceRepository
+    public interface IInvoiceRepository : IBaseRepository<InvoiceEntity>
     {
     }
 }

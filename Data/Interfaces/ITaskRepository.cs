@@ -1,6 +1,9 @@
-﻿namespace Data.Interfaces
+﻿using Data.Entities;
+
+namespace Data.Interfaces
 {
-    internal interface ITaskRepository
+    public interface ITaskRepository : IBaseRepository<TaskEntity>
     {
+    
     }
 }

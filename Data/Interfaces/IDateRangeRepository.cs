@@ -1,6 +1,8 @@
-﻿namespace Data.Interfaces
+﻿using Data.Entities;
+
+namespace Data.Interfaces
 {
-    internal interface IDateRangeRepository
+    public interface IDateRangeRepository : IBaseRepository<DateRangeEntity>
     {
     }
 }

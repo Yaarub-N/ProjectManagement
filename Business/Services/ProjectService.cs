@@ -36,36 +36,26 @@ namespace Business.Services
         {
             try
             {
-                // Validera projectNumber
                 if (projectNumber <= 0)
                 {
                     return new ServiceResponse<ProjectDTO>(null!, false, "Invalid project number.");
                 }
-
-                // Hämta projektet från databasen
-                var project = await _context.Projects
+             var project = await _context.Projects
                     .Include(p => p.Status)
                     .Include(p => p.Customer)
                     .Include(p => p.Service)
-                    .Include(p => p.DateRange) // Se till att DateRange ingår
-                    .Include(p => p.ProjectManager) // Se till att ProjectManager ingår
+                    .Include(p => p.DateRange) 
+                    .Include(p => p.ProjectManager) 
                     .FirstOrDefaultAsync(p => p.ProjectNumber == projectNumber);
-
-                // Kontrollera om projektet finns
                 if (project == null)
                 {
                     return new ServiceResponse<ProjectDTO>(null!, false, "Project not found.");
                 }
-
-                // Använd ProjectFactory för att mappa ProjectEntity till ProjectDTO
                 var projectDTO = ProjectFactory.ToDTO(project);
-
-                // Returnera ett lyckat svar med projektet
                 return new ServiceResponse<ProjectDTO>(projectDTO, true);
             }
             catch (Exception e)
             {
-                // Hantera eventuella undantag och returnera ett felmeddelande
                 return new ServiceResponse<ProjectDTO>(null!, false, $"Something went wrong: {e.Message}");
             }
         }
@@ -75,8 +65,6 @@ namespace Business.Services
         {
             try
             {
-
-
                 if (projectForm == null)
                     return new ServiceResponse<ProjectDTO>(null!, false, "Invalid project data.");
 
@@ -110,7 +98,6 @@ namespace Business.Services
                 if (existingProject == null)
                     return new ServiceResponse<ProjectDTO>(null!, false, "Project not found.");
 
-                // Validering: Se till att StatusId, CustomerId och ServiceId är giltiga.
                 if (projectForm.StatusId <= 0 || projectForm.CustomerId <= 0 || projectForm.ServiceId <= 0)
                 {
                     return new ServiceResponse<ProjectDTO>(null!, false, "Invalid status, customer, or service ID.");
@@ -136,8 +123,6 @@ namespace Business.Services
                 return new ServiceResponse<ProjectDTO>(null!, false, $"Something went wrong: {e.Message}");
             }
         }
-
-
 
         public async Task<ServiceResponse<bool>> DeleteProjectAsync(int projectNumber)
         {

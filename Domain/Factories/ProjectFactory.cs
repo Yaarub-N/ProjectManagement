@@ -13,7 +13,7 @@ namespace Domain.Factories
             var statusName = project.Status?.Name ?? "Unknown Status";
             var customerName = project.Customer?.Profile?.Name ?? "Unknown Customer";
             var serviceName = project.Service?.Name ?? "Unknown Service";
-            var serviceHourlyRate = project.Service?.HourlyRate ?? 0;
+            var serviceHourlyRate = project.Service?.HourlyRate ?? 0;   
             var startDate = project.DateRange?.StartDate ?? DateTime.MinValue;
             var endDate = project.DateRange?.EndDate ?? DateTime.MinValue;
             var projectManagerName = (project.ProjectManager != null)
