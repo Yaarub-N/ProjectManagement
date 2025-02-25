@@ -1,4 +1,5 @@
-﻿using Data.Interfaces;
+﻿using Business.Interfaces;
+using Data.Interfaces;
 using Data.Repositories;
 using Domain.DTO;
 using Domain.Factories;
@@ -6,14 +7,9 @@ using Domain.ServiceResponses;
 
 namespace Business.Services
 {
-    public class InvoiceStatusService
+    public class InvoiceStatusService(IInvoiceStatusRepository invoiceStatusRepository) : IInvoiceStatusService
     {
-        private readonly IInvoiceStatusRepository _invoiceStatusRepository;
-
-        public InvoiceStatusService(IInvoiceStatusRepository invoiceStatusRepository)
-        {
-            _invoiceStatusRepository = invoiceStatusRepository;
-        }
+        private readonly IInvoiceStatusRepository _invoiceStatusRepository = invoiceStatusRepository;
 
         public async Task<ServiceResponse<InvoiceStatusDTO>> CreateInvoiceStatusAsync(InvoiceStatusDTO invoiceStatusDTO)
         {

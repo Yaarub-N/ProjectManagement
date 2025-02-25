@@ -1,11 +1,12 @@
-﻿using Data.Interfaces;
+﻿using Business.Interfaces;
+using Data.Interfaces;
 using Domain.DTO;
 using Domain.Factories;
 using Domain.ServiceResponses;
 
 namespace Business.Services
 {
-    public class RoleService(IRoleRepository roleRepository)
+    public class RoleService(IRoleRepository roleRepository) : IRoleService
     {
         private readonly IRoleRepository _roleRepository = roleRepository;
 

@@ -1,11 +1,12 @@
-﻿using Data.Interfaces;
+﻿using Business.Interfaces;
+using Data.Interfaces;
 using Domain.DTO;
 using Domain.Factories;
 using Domain.ServiceResponses;
 
 namespace Business.Services
 {
-    public class TaskService(ITaskRepository taskRepository)
+    public class TaskService(ITaskRepository taskRepository) : ITaskService
     {
         private readonly ITaskRepository _taskRepository = taskRepository;
 
@@ -17,7 +18,7 @@ namespace Business.Services
                 if (taskDTO == null)
                     return new ServiceResponse<TaskDTO>(null!, false, "Invalid task data.");
 
-                var taskEntity = ProjectTaskFactory.ToEntity(taskDTO);  
+                var taskEntity = ProjectTaskFactory.ToEntity(taskDTO);
                 var result = await _taskRepository.AddAsync(taskEntity);
 
                 if (!result)
@@ -42,7 +43,7 @@ namespace Business.Services
                 if (task == null)
                     return new ServiceResponse<TaskDTO>(null!, false, "Task not found.");
 
-                return new ServiceResponse<TaskDTO>(ProjectTaskFactory.ToDTO(task), true);  
+                return new ServiceResponse<TaskDTO>(ProjectTaskFactory.ToDTO(task), true);
             }
             catch (Exception e)
             {

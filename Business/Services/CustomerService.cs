@@ -1,4 +1,5 @@
-﻿using Data.Entities;
+﻿using Business.Interfaces;
+using Data.Entities;
 using Data.Interfaces;
 using Domain.DTO;
 using Domain.Factories;
@@ -6,7 +7,7 @@ using Domain.ServiceResponses;
 
 namespace Business.Services
 {
-    public class CustomerService(ICustomerRepository customerRepository)
+    public class CustomerService(ICustomerRepository customerRepository) : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository = customerRepository;
 
@@ -43,7 +44,7 @@ namespace Business.Services
                 if (customer == null)
                     return new ServiceResponse<CustomerDTO>(null!, false, "Customer not found.");
 
-                return new ServiceResponse<CustomerDTO>(CustomerFactory.ToDTO(customer), true );
+                return new ServiceResponse<CustomerDTO>(CustomerFactory.ToDTO(customer), true);
             }
             catch (Exception e)
             {

@@ -1,18 +1,14 @@
-﻿using Data.Interfaces;
+﻿using Business.Interfaces;
+using Data.Interfaces;
 using Domain.DTO;
 using Domain.Factories;
 using Domain.ServiceResponses;
 
 namespace Business.Services
 {
-    public class InvoiceService
+    public class InvoiceService(IInvoiceRepository invoiceRepository) : IInvoiceService
     {
-        private readonly IInvoiceRepository _invoiceRepository;
-
-        public InvoiceService(IInvoiceRepository invoiceRepository)
-        {
-            _invoiceRepository = invoiceRepository;
-        }
+        private readonly IInvoiceRepository _invoiceRepository = invoiceRepository;
 
         public async Task<ServiceResponse<InvoiceDTO>> CreateInvoiceAsync(InvoiceDTO invoiceDTO)
         {

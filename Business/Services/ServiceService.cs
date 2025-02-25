@@ -1,15 +1,15 @@
-﻿using Data.Interfaces;
+﻿using Business.Interfaces;
+using Data.Interfaces;
 using Domain.DTO;
 using Domain.Factories;
 using Domain.ServiceResponses;
 
 namespace Business.Services
 {
-    public class ServiceService(IServiceRepository serviceRepository)
+    public class ServiceService(IServiceRepository serviceRepository) : IServiceService
     {
         private readonly IServiceRepository _serviceRepository = serviceRepository;
 
-        // CREATE
         public async Task<ServiceResponse<ServiceDTO>> CreateServiceAsync(ServiceDTO serviceDTO)
         {
             try
@@ -31,7 +31,6 @@ namespace Business.Services
             }
         }
 
-        // UPDATE
         public async Task<ServiceResponse<ServiceDTO>> UpdateServiceAsync(int serviceId, ServiceDTO serviceDTO)
         {
             try
@@ -58,7 +57,6 @@ namespace Business.Services
             }
         }
 
-        // DELETE
         public async Task<ServiceResponse<bool>> DeleteServiceAsync(int serviceId)
         {
             try

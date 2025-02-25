@@ -1,4 +1,5 @@
 ﻿
+using Business.Interfaces;
 using Data.Context;
 using Data.Interfaces;
 using Domain.DTO;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Business.Services
 {
-    public class ProjectService(IProjectRepository projectRepository, DataContext context)
+    public class ProjectService(IProjectRepository projectRepository, DataContext context) : IProjectService
     {
         private readonly DataContext _context = context;
         private readonly IProjectRepository _projectRepository = projectRepository;
@@ -53,7 +54,7 @@ namespace Business.Services
                     return new ServiceResponse<IEnumerable<ProjectDTO>>(null!, false, "Project not found.");
                 }
 
-              
+
                 var projectDTOList = new List<ProjectDTO> { ProjectFactory.ToDTO(project) };
                 return new ServiceResponse<IEnumerable<ProjectDTO>>(projectDTOList, true);
             }

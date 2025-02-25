@@ -1,11 +1,12 @@
-﻿using Data.Interfaces;
+﻿using Business.Interfaces;
+using Data.Interfaces;
 using Domain.DTO;
 using Domain.Factories;
 using Domain.ServiceResponses;
 
 namespace Business.Services
 {
-    public class ProfileService(IProfileRepository profileRepository)
+    public class ProfileService(IProfileRepository profileRepository) : IProfileService
     {
         private readonly IProfileRepository _profileRepository = profileRepository;
 

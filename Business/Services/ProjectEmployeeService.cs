@@ -1,4 +1,5 @@
-﻿using Data.Entities;
+﻿using Business.Interfaces;
+using Data.Entities;
 using Data.Interfaces;
 using Domain.DTO;
 using Domain.Factories;
@@ -6,7 +7,7 @@ using Domain.ServiceResponses;
 
 namespace Business.Services
 {
-    public class ProjectEmployeeService(IProjectEmployeeRepository projectEmployeeRepository)
+    public class ProjectEmployeeService(IProjectEmployeeRepository projectEmployeeRepository) : IProjectEmployeeService
     {
         private readonly IProjectEmployeeRepository _projectEmployeeRepository = projectEmployeeRepository;
 

@@ -1,4 +1,5 @@
-﻿using Data.Interfaces;
+﻿using Business.Interfaces;
+using Data.Interfaces;
 using Domain.DTO;
 using Domain.Factories;
 using Domain.ServiceResponses;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Business.Services
 {
-    public class AddressService(IAddressRepository addressRepository)
+    public class AddressService(IAddressRepository addressRepository) : IAddressService
     {
         private readonly IAddressRepository _addressRepository = addressRepository;
 

@@ -1,11 +1,12 @@
-﻿using Data.Interfaces;
+﻿using Business.Interfaces;
+using Data.Interfaces;
 using Domain.DTO;
 using Domain.Factories;
 using Domain.ServiceResponses;
 
 namespace Business.Services
 {
-    public class TimesheetService(ITimesheetRepository timesheetRepository)
+    public class TimesheetService(ITimesheetRepository timesheetRepository) : ITimesheetService
     {
         public async Task<ServiceResponse<TimesheetDTO>> CreateTimesheetAsync(TimesheetDTO timesheetDTO)
         {
