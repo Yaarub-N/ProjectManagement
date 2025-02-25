@@ -1,5 +1,4 @@
 ﻿using Data.Interfaces;
-
 using Domain.DTO;
 using Domain.Factories;
 using Domain.ServiceResponses;
@@ -9,40 +8,44 @@ namespace Business.Services
     public class ProfileService(IProfileRepository profileRepository)
     {
         private readonly IProfileRepository _profileRepository = profileRepository;
-        public async Task<ServiceResponse<IEnumerable<ProfileDTO>>> GetAllProfilesAsync()
-        {
-            try
-            {
-                var profiles = await _profileRepository.GetAllAsync();
-                if (!profiles.Any())
-                    return new ServiceResponse<IEnumerable<ProfileDTO>>(null!, false, "No profiles found.");
 
-                return new ServiceResponse<IEnumerable<ProfileDTO>>(ProfileFactory.ToDTOList(profiles), true);
-            }
-            catch (Exception e)
-            {
-                return new ServiceResponse<IEnumerable<ProfileDTO>>(null!, false, $"Something went wrong: {e.Message}");
-            }
-        }
-
-        public async Task<ServiceResponse<IEnumerable<ProfileDTO>>> CreateProfileAsync(ProfileDTO profileDTO)
+        public async Task<ServiceResponse<ProfileDTO>> CreateProfileAsync(ProfileDTO profileDTO)
         {
             try
             {
                 if (profileDTO == null)
-                    return new ServiceResponse<IEnumerable<ProfileDTO>>(null!, false, "Invalid profile data.");
+                    return new ServiceResponse<ProfileDTO>(null!, false, "Invalid profile data.");
 
                 var profileEntity = ProfileFactory.ToEntity(profileDTO);
                 var result = await _profileRepository.AddAsync(profileEntity);
 
                 if (!result)
-                    return new ServiceResponse<IEnumerable<ProfileDTO>>(null!, false, "Failed to create profile.");
+                    return new ServiceResponse<ProfileDTO>(null!, false, "Failed to create profile.");
 
-                return new ServiceResponse<IEnumerable<ProfileDTO>>([ProfileFactory.ToDTO(profileEntity)], true, "Profile created successfully.");
+                return new ServiceResponse<ProfileDTO>(ProfileFactory.ToDTO(profileEntity), true, "Profile created successfully.");
             }
             catch (Exception e)
             {
-                return new ServiceResponse<IEnumerable<ProfileDTO>>(null!, false, $"Something went wrong: {e.Message}");
+                return new ServiceResponse<ProfileDTO>(null!, false, $"Something went wrong: {e.Message}");
+            }
+        }
+
+        public async Task<ServiceResponse<ProfileDTO>> GetProfileByIdAsync(int profileId)
+        {
+            try
+            {
+                if (profileId <= 0)
+                    return new ServiceResponse<ProfileDTO>(null!, false, "Invalid profile ID.");
+
+                var profile = await _profileRepository.GetAsync(p => p.Id == profileId);
+                if (profile == null)
+                    return new ServiceResponse<ProfileDTO>(null!, false, "Profile not found.");
+
+                return new ServiceResponse<ProfileDTO>(ProfileFactory.ToDTO(profile), true);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<ProfileDTO>(null!, false, $"Something went wrong: {e.Message}");
             }
         }
 

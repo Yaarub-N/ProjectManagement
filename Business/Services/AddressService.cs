@@ -10,14 +10,12 @@ namespace Business.Services
     {
         private readonly IAddressRepository _addressRepository = addressRepository;
 
-        // ✅ CREATE Address
         public async Task<ServiceResponse<AddressDTO>> CreateAddressAsync(AddressDTO addressDTO)
         {
             try
             {
                 if (addressDTO == null)
                     return new ServiceResponse<AddressDTO>(null!, false, "Invalid address data.");
-
                 var addressEntity = AddressFactory.ToEntity(addressDTO);
                 var result = await _addressRepository.AddAsync(addressEntity);
 
@@ -32,7 +30,6 @@ namespace Business.Services
             }
         }
 
-        // ✅ GET Address by ID
         public async Task<ServiceResponse<AddressDTO>> GetAddressByIdAsync(int addressId)
         {
             try
@@ -52,7 +49,6 @@ namespace Business.Services
             }
         }
 
-        // ✅ UPDATE Address
         public async Task<ServiceResponse<AddressDTO>> UpdateAddressAsync(int addressId, AddressDTO addressDTO)
         {
             try
@@ -78,7 +74,7 @@ namespace Business.Services
             }
         }
 
-        // ✅ DELETE Address
+
         public async Task<ServiceResponse<bool>> DeleteAddressAsync(int addressId)
         {
             try

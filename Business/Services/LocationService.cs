@@ -2,7 +2,6 @@
 using Domain.DTO;
 using Domain.Factories;
 using Domain.ServiceResponses;
-using Microsoft.EntityFrameworkCore;
 
 namespace Business.Services
 {
@@ -30,22 +29,22 @@ namespace Business.Services
             }
         }
 
-        public async Task<ServiceResponse<IEnumerable<LocationDTO>>> GetLocationByIdAsync(int locationId)
+        public async Task<ServiceResponse<LocationDTO>> GetLocationByIdAsync(int locationId)
         {
             try
             {
                 if (locationId <= 0)
-                    return new ServiceResponse<IEnumerable<LocationDTO>>(null!, false, "Invalid location ID.");
+                    return new ServiceResponse<LocationDTO>(null!, false, "Invalid location ID.");
 
                 var location = await _locationRepository.GetAsync(l => l.Id == locationId);
                 if (location == null)
-                    return new ServiceResponse<IEnumerable<LocationDTO>>(null!, false, "Location not found.");
+                    return new ServiceResponse<LocationDTO>(null!, false, "Location not found.");
 
-                return new ServiceResponse<IEnumerable<LocationDTO>>(new List<LocationDTO> { LocationFactory.ToDTO(location) }, true);
+                return new ServiceResponse<LocationDTO>(LocationFactory.ToDTO(location), true);
             }
             catch (Exception e)
             {
-                return new ServiceResponse<IEnumerable<LocationDTO>>(null!, false, $"Something went wrong: {e.Message}");
+                return new ServiceResponse<LocationDTO>(null!, false, $"Something went wrong: {e.Message}");
             }
         }
 
