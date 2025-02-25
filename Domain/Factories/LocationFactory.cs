@@ -25,5 +25,9 @@ namespace Domain.Factories
                 Country = locationDTO.Country
             };
         }
+        public static IEnumerable<LocationDTO> ToDTOList(IEnumerable<LocationEntity> customers)
+        {
+            return customers.Select(ToDTO);
+        }
     }
 }

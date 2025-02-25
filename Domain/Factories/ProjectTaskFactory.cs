@@ -3,7 +3,7 @@ using Domain.DTO;
 
 namespace Domain.Factories
 {
-    public static class ProjectTaskFactory  // Changed class name to avoid ambiguity
+    public static class ProjectTaskFactory  
     {
         public static TaskDTO ToDTO(TaskEntity task)
         {
@@ -25,6 +25,10 @@ namespace Domain.Factories
                 IsCompleted = taskDTO.IsCompleted,
                 ProjectId = taskDTO.ProjectId
             };
+        }
+        public static IEnumerable<TaskDTO> ToDTOList(IEnumerable<TaskEntity> profiles)
+        {
+            return profiles.Select(ToDTO);
         }
     }
 }

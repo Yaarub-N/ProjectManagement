@@ -22,5 +22,9 @@ namespace Domain.Factories
                 Name = statusDTO.Name
             };
         }
+        public static IEnumerable<StatusDTO> ToDTOList(IEnumerable<StatusEntity> projects)
+        {
+            return projects.Select(ToDTO);
+        }
     }
 }

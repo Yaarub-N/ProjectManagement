@@ -1,4 +1,5 @@
-﻿using Data.Interfaces;
+﻿using Data.Entities;
+using Data.Interfaces;
 using Domain.DTO;
 using Domain.Factories;
 using Domain.ServiceResponses;
@@ -31,22 +32,22 @@ namespace Business.Services
         }
 
 
-        public async Task<ServiceResponse<CustomerDTO>> GetCustomerByIdAsync(int customerId)
+        public async Task<ServiceResponse<IEnumerable<CustomerDTO>>> GetCustomerByIdAsync(int customerId)
         {
             try
             {
                 if (customerId <= 0)
-                    return new ServiceResponse<CustomerDTO>(null!, false, "Invalid customer ID.");
+                    return new ServiceResponse<IEnumerable<CustomerDTO>>(null!, false, "Invalid customer ID.");
 
                 var customer = await _customerRepository.GetAsync(c => c.Id == customerId);
                 if (customer == null)
-                    return new ServiceResponse<CustomerDTO>(null!, false, "Customer not found.");
+                    return new ServiceResponse<IEnumerable<CustomerDTO>>(null!, false, "Customer not found.");
 
-                return new ServiceResponse<CustomerDTO>(CustomerFactory.ToDTO(customer), true);
+                return new ServiceResponse<IEnumerable<CustomerDTO>>(new List<CustomerDTO> { CustomerFactory.ToDTO(customer)}, true );
             }
             catch (Exception e)
             {
-                return new ServiceResponse<CustomerDTO>(null!, false, $"Something went wrong: {e.Message}");
+                return new ServiceResponse<IEnumerable<CustomerDTO>>(null!, false, $"Something went wrong: {e.Message}");
             }
         }
 

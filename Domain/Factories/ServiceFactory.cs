@@ -26,5 +26,9 @@ namespace Domain.Factories
                 HourlyRate = serviceDTO.HourlyRate
             };
         }
+        public static IEnumerable<ServiceDTO> ToDTOList(IEnumerable<ServiceEntity> projects)
+        {
+            return projects.Select(ToDTO);
+        }
     }
 }

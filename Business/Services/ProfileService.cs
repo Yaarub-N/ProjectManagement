@@ -25,24 +25,24 @@ namespace Business.Services
             }
         }
 
-        public async Task<ServiceResponse<ProfileDTO>> CreateProfileAsync(ProfileDTO profileDTO)
+        public async Task<ServiceResponse<IEnumerable<ProfileDTO>>> CreateProfileAsync(ProfileDTO profileDTO)
         {
             try
             {
                 if (profileDTO == null)
-                    return new ServiceResponse<ProfileDTO>(null!, false, "Invalid profile data.");
+                    return new ServiceResponse<IEnumerable<ProfileDTO>>(null!, false, "Invalid profile data.");
 
                 var profileEntity = ProfileFactory.ToEntity(profileDTO);
                 var result = await _profileRepository.AddAsync(profileEntity);
 
                 if (!result)
-                    return new ServiceResponse<ProfileDTO>(null!, false, "Failed to create profile.");
+                    return new ServiceResponse<IEnumerable<ProfileDTO>>(null!, false, "Failed to create profile.");
 
-                return new ServiceResponse<ProfileDTO>(ProfileFactory.ToDTO(profileEntity), true, "Profile created successfully.");
+                return new ServiceResponse<IEnumerable<ProfileDTO>>([ProfileFactory.ToDTO(profileEntity)], true, "Profile created successfully.");
             }
             catch (Exception e)
             {
-                return new ServiceResponse<ProfileDTO>(null!, false, $"Something went wrong: {e.Message}");
+                return new ServiceResponse<IEnumerable<ProfileDTO>>(null!, false, $"Something went wrong: {e.Message}");
             }
         }
 

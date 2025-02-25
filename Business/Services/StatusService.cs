@@ -31,6 +31,26 @@ namespace Business.Services
         }
 
 
+        public async Task<ServiceResponse<StatusDTO>> GetStatusByIdAsync(int statusId)
+        {
+            try
+            {
+                if (statusId <= 0)
+                    return new ServiceResponse<StatusDTO>(null!, false, "Invalid status ID.");
+
+                var status = await _statusRepository.GetAsync(s => s.Id == statusId);
+                if (status == null)
+                    return new ServiceResponse<StatusDTO>(null!, false, "Status not found.");
+
+                return new ServiceResponse<StatusDTO>(StatusFactory.ToDTO(status), true);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<StatusDTO>(null!, false, $"Something went wrong: {e.Message}");
+            }
+        }
+
+
         public async Task<ServiceResponse<StatusDTO>> UpdateStatusAsync(int statusId, StatusDTO statusDTO)
         {
             try

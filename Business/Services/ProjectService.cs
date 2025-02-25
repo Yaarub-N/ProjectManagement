@@ -31,34 +31,19 @@ namespace Business.Services
 
         }
 
-
         public async Task<ServiceResponse<ProjectDTO>> GetProjectByIdAsync(int projectNumber)
         {
-            try
-            {
-                if (projectNumber <= 0)
-                {
-                    return new ServiceResponse<ProjectDTO>(null!, false, "Invalid project number.");
-                }
-             var project = await _context.Projects
-                    .Include(p => p.Status)
-                    .Include(p => p.Customer)
-                    .Include(p => p.Service)
-                    .Include(p => p.DateRange) 
-                    .Include(p => p.ProjectManager) 
-                    .FirstOrDefaultAsync(p => p.ProjectNumber == projectNumber);
-                if (project == null)
-                {
-                    return new ServiceResponse<ProjectDTO>(null!, false, "Project not found.");
-                }
-                var projectDTO = ProjectFactory.ToDTO(project);
-                return new ServiceResponse<ProjectDTO>(projectDTO, true);
-            }
-            catch (Exception e)
-            {
-                return new ServiceResponse<ProjectDTO>(null!, false, $"Something went wrong: {e.Message}");
-            }
+            var project = await _context.Projects
+                .Include(p => p.Status)
+                .Include(p => p.Customer)
+                .Include(p => p.Service)
+                .FirstOrDefaultAsync(p => p.ProjectNumber == projectNumber);
+
+            if (project == null) return new ServiceResponse<ProjectDTO>(null!, false, "Project not found.");
+            return new ServiceResponse<ProjectDTO>(ProjectFactory.ToDTO(project), true);
         }
+
+
 
 
         public async Task<ServiceResponse<ProjectDTO>> CreateProjectAsync(ProjectRegistrationForm projectForm)
@@ -132,7 +117,7 @@ namespace Business.Services
                     return new ServiceResponse<bool>(false, false, "Invalid project number.");
 
                 var existingProject = await _projectRepository.GetProjectDetailsAsync(projectNumber);
-                if (existingProject == null)
+                if (existingProject == null)    
                     return new ServiceResponse<bool>(false, false, "Project not found.");
 
                 var result = await _projectRepository.RemoveAsync(existingProject);

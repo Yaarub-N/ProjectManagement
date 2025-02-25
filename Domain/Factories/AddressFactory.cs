@@ -24,5 +24,10 @@ namespace Domain.Factories
                 LocationId = addressDTO.Location.Id 
             };
         }
+      
+        public static IEnumerable<AddressDTO> ToDTOList(IEnumerable<AddressEntity> addresses)
+        {
+            return addresses.Select(ToDTO);
+        }
     }
 }
