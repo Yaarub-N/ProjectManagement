@@ -2,8 +2,8 @@
 
 namespace Data.Interfaces
 {
-    internal interface IInvoiceStatusRepository : IBaseRepository<InvoiceEntity>
+    public interface IInvoiceStatusRepository : IBaseRepository<InvoiceStatusEntity>
     {
-    {
+    
     }
 }
