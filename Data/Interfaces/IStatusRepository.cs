@@ -2,7 +2,7 @@
 
 namespace Data.Interfaces
 {
-    public interface IStatusRepository : IBaseRepository<AddressEntity>
+    public interface IStatusRepository : IBaseRepository<StatusEntity>
     {
     
     }
