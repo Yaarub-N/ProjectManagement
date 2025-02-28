@@ -30,6 +30,23 @@ namespace Business.Services
                 return new ServiceResponse<AddressDTO>(null!, false, $"Something went wrong: {e.Message}");
             }
         }
+        public async Task<ServiceResponse<IEnumerable<AddressDTO>>> GetAllAddressesAsync()
+        {
+            try
+            {
+                var addresses = await _addressRepository.GetAllAsync(); 
+                if (addresses == null || !addresses.Any())
+                    return new ServiceResponse<IEnumerable<AddressDTO>>(null!, false, "No addresses found.");
+
+                var addressDTOs = AddressFactory.ToDTOList(addresses); 
+                return new ServiceResponse<IEnumerable<AddressDTO>>(addressDTOs, true);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<IEnumerable<AddressDTO>>(null!, false, $"Something went wrong: {e.Message}");
+            }
+        }
+
 
         public async Task<ServiceResponse<AddressDTO>> GetAddressByIdAsync(int addressId)
         {

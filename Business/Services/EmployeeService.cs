@@ -6,14 +6,9 @@ using Domain.ServiceResponses;
 
 namespace Business.Services
 {
-    public class EmployeeService : IEmployeeService
+    public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployeeService
     {
-        private readonly IEmployeeRepository _employeeRepository;
-
-        public EmployeeService(IEmployeeRepository employeeRepository)
-        {
-            _employeeRepository = employeeRepository;
-        }
+        private readonly IEmployeeRepository _employeeRepository = employeeRepository;
 
         public async Task<ServiceResponse<EmployeeDTO>> CreateEmployeeAsync(EmployeeDTO employeeDTO)
         {
@@ -35,6 +30,23 @@ namespace Business.Services
                 return new ServiceResponse<EmployeeDTO>(null!, false, $"Something went wrong: {e.Message}");
             }
         }
+
+
+        public async Task<ServiceResponse<IEnumerable<EmployeeDTO>>> GetAllEmployeesAsync()
+        {
+            try
+            {
+                var employees = await _employeeRepository.GetAllAsync();  
+                var employeeDTOs = EmployeeFactory.ToDTOList(employees);
+                return new ServiceResponse<IEnumerable<EmployeeDTO>>(employeeDTOs, true);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<IEnumerable<EmployeeDTO>>(null!, false, $"Something went wrong: {e.Message}");
+            }
+        }
+
+
 
         public async Task<ServiceResponse<EmployeeDTO>> GetEmployeeByIdAsync(int employeeId)
         {
@@ -79,6 +91,7 @@ namespace Business.Services
                 return new ServiceResponse<EmployeeDTO>(null!, false, $"Something went wrong: {e.Message}");
             }
         }
+
 
         public async Task<ServiceResponse<bool>> DeleteEmployeeAsync(int employeeId)
         {

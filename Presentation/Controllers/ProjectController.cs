@@ -1,4 +1,4 @@
-﻿using Business.Services;
+﻿using Business.Interfaces;
 using Domain.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,9 +6,9 @@ namespace Presentation.Controllers
 {
     [ApiController]
     [Route("api/projects")]
-    public class ProjectController(ProjectService projectService) : ControllerBase
+    public class ProjectController(IProjectService projectService) : ControllerBase
     {
-        private readonly ProjectService _projectService = projectService;
+        private readonly IProjectService _projectService = projectService;
 
         [HttpGet]
         public async Task<IActionResult> GetProjects()
@@ -25,16 +25,24 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProject([FromBody] ProjectRegistrationForm projectForm)
+        public async Task<IActionResult> CreateProject([FromBody] ProjectRegistrationForm form)
         {
-            var response = await _projectService.CreateProjectAsync(projectForm);
-            return response.Success ? Created("", response.Data) : BadRequest(response.Message);
+            if (form == null)
+                return BadRequest("Invalid project data.");
+
+            var response = await _projectService.CreateProjectAsync(form);
+            return response.Success
+                ? CreatedAtAction(nameof(GetProject), new { projectNumber = response.Data!.ProjectNumber }, response.Data)
+                : BadRequest(response.Message);
         }
 
         [HttpPut("{projectNumber}")]
-        public async Task<IActionResult> UpdateProject(int projectNumber, [FromBody] ProjectRegistrationForm projectForm)
+        public async Task<IActionResult> UpdateProject(int projectNumber, [FromBody] ProjectRegistrationForm form)
         {
-            var response = await _projectService.UpdateProjectAsync(projectNumber, projectForm);
+            if (form == null)
+                return BadRequest("Invalid project update request.");
+
+            var response = await _projectService.UpdateProjectAsync(projectNumber, form);
             return response.Success ? Ok(response.Data) : BadRequest(response.Message);
         }
 

@@ -1,5 +1,4 @@
-﻿
-using Business.Interfaces;
+﻿using Business.Interfaces;
 using Data.Context;
 using Data.Interfaces;
 using Domain.DTO;
@@ -15,6 +14,28 @@ namespace Business.Services
         private readonly IProjectRepository _projectRepository = projectRepository;
 
 
+        public async Task<ServiceResponse<ProjectDTO>> CreateProjectAsync(ProjectRegistrationForm form)
+        {
+            try
+            {
+                if (form == null)
+                    return new ServiceResponse<ProjectDTO>(null!, false, "Invalid project data.");
+
+                var projectEntity = ProjectFactory.ToEntity(form);
+                var result = await _projectRepository.AddAsync(projectEntity);
+
+                if (!result)
+                    return new ServiceResponse<ProjectDTO>(null!, false, "Failed to create project.");
+
+                return new ServiceResponse<ProjectDTO>(ProjectFactory.ToDTO(projectEntity), true, "Project created successfully.");
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<ProjectDTO>(null!, false, $"Something went wrong: {e.Message}");
+            }
+        }
+
+
         public async Task<ServiceResponse<IEnumerable<ProjectDTO>>> GetAllProjectsAsync()
         {
             try
@@ -27,95 +48,57 @@ namespace Business.Services
             }
             catch (Exception e)
             {
-                return new ServiceResponse<IEnumerable<ProjectDTO>>(null!, false, $"Somthing went wrong: {e.Message}");
+                return new ServiceResponse<IEnumerable<ProjectDTO>>(null!, false, $"Something went wrong: {e.Message}");
             }
-
         }
 
-
-        public async Task<ServiceResponse<IEnumerable<ProjectDTO>>> GetProjectByIdAsync(int projectNumber)
+        public async Task<ServiceResponse<ProjectDTO>> GetProjectByIdAsync(int projectNumber)
         {
             try
             {
                 if (projectNumber <= 0)
-                {
-                    return new ServiceResponse<IEnumerable<ProjectDTO>>(null!, false, "Invalid project number.");
-                }
+                    return new ServiceResponse<ProjectDTO>(null!, false, "Invalid project number.");
+
                 var project = await _context.Projects
                     .Include(p => p.Status)
-                    .Include(p => p.Customer)
+                    .Include(p => p.Customer).ThenInclude(c => c!.Profile)
                     .Include(p => p.Service)
                     .Include(p => p.DateRange)
                     .Include(p => p.ProjectManager)
                     .FirstOrDefaultAsync(p => p.ProjectNumber == projectNumber);
 
                 if (project == null)
-                {
-                    return new ServiceResponse<IEnumerable<ProjectDTO>>(null!, false, "Project not found.");
-                }
+                    return new ServiceResponse<ProjectDTO>(null!, false, "Project not found.");
 
-
-                var projectDTOList = new List<ProjectDTO> { ProjectFactory.ToDTO(project) };
-                return new ServiceResponse<IEnumerable<ProjectDTO>>(projectDTOList, true);
+                return new ServiceResponse<ProjectDTO>(ProjectFactory.ToDTO(project), true);
             }
             catch (Exception e)
             {
-                return new ServiceResponse<IEnumerable<ProjectDTO>>(null!, false, $"Something went wrong: {e.Message}");
+                return new ServiceResponse<ProjectDTO>(null!, false, $"Something went wrong: {e.Message}");
             }
         }
+  
 
-
-
-        public async Task<ServiceResponse<ProjectDTO>> CreateProjectAsync(ProjectRegistrationForm projectForm)
+        public async Task<ServiceResponse<ProjectDTO>> UpdateProjectAsync(int projectNumber, ProjectRegistrationForm form)
         {
             try
             {
-                if (projectForm == null)
-                    return new ServiceResponse<ProjectDTO>(null!, false, "Invalid project data.");
-
-                var projectEntity = ProjectFactory.ToEntity(projectForm);
-
-                var result = await _projectRepository.AddAsync(projectEntity);
-
-                if (!result)
-                {
-                    return new ServiceResponse<ProjectDTO>(null!, false, "Failed to create project.");
-                }
-
-                Console.WriteLine($"Project Created: {projectEntity.Name}, Status: {projectEntity.Status?.Name}, Customer: {projectEntity.Customer?.Profile?.Name}, Service: {projectEntity.Service?.Name}");
-
-                return new ServiceResponse<ProjectDTO>(ProjectFactory.ToDTO(projectEntity), true, "Project created successfully.");
-            }
-            catch (Exception e)
-            {
-                return new ServiceResponse<ProjectDTO>(null!, false, $"Somthing went wrong: {e.Message}");
-            }
-
-        }
-        public async Task<ServiceResponse<ProjectDTO>> UpdateProjectAsync(int projectNumber, ProjectRegistrationForm projectForm)
-        {
-            try
-            {
-                if (projectNumber <= 0 || projectForm == null)
+                if (projectNumber <= 0 || form == null)
                     return new ServiceResponse<ProjectDTO>(null!, false, "Invalid project update request.");
 
                 var existingProject = await _projectRepository.GetProjectDetailsAsync(projectNumber);
                 if (existingProject == null)
                     return new ServiceResponse<ProjectDTO>(null!, false, "Project not found.");
 
-                if (projectForm.StatusId <= 0 || projectForm.CustomerId <= 0 || projectForm.ServiceId <= 0)
-                {
-                    return new ServiceResponse<ProjectDTO>(null!, false, "Invalid status, customer, or service ID.");
-                }
-
-                existingProject.Name = projectForm.Name;
-                existingProject.Description = projectForm.Description;
-                existingProject.TotalPrice = projectForm.TotalPrice;
-                existingProject.DateRange.StartDate = projectForm.StartDate;
-                existingProject.DateRange.EndDate = projectForm.EndDate;
-                existingProject.StatusId = projectForm.StatusId;
-                existingProject.CustomerId = projectForm.CustomerId;
-                existingProject.ServiceId = projectForm.ServiceId;
+                existingProject.Name = form.Name;
+                existingProject.Description = form.Description;
+                existingProject.TotalPrice = form.TotalPrice;
+                existingProject.DateRange.StartDate = form.StartDate;
+                existingProject.DateRange.EndDate = form.EndDate;
+                existingProject.StatusId = form.StatusId;
+                existingProject.CustomerId = form.CustomerId;
+                existingProject.ServiceId = form.ServiceId;
+                existingProject.ProjectManagerId = form.ProjectManagerId;
 
                 var result = await _projectRepository.UpdateAsync(existingProject);
                 if (!result)
@@ -147,9 +130,8 @@ namespace Business.Services
             }
             catch (Exception e)
             {
-                return new ServiceResponse<bool>(false, $"Somthing went wrong: {e.Message}");
+                return new ServiceResponse<bool>(false, $"Something went wrong: {e.Message}");
             }
-
         }
     }
 }

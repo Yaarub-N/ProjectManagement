@@ -1,26 +1,23 @@
 ﻿
 using Data.Entities;
 using Domain.DTO;
-
+//chat Gpt4o
 namespace Domain.Factories
 {
     public static class ProjectFactory
     {
-
         public static ProjectDTO ToDTO(ProjectEntity project)
         {
-             //ChatGpt 4o
             var statusName = project.Status?.Name ?? "Unknown Status";
             var customerName = project.Customer?.Profile?.Name ?? "Unknown Customer";
             var serviceName = project.Service?.Name ?? "Unknown Service";
-            var serviceHourlyRate = project.Service?.HourlyRate ?? 0;   
+            var serviceHourlyRate = project.Service?.HourlyRate ?? 0;
             var startDate = project.DateRange?.StartDate ?? DateTime.MinValue;
             var endDate = project.DateRange?.EndDate ?? DateTime.MinValue;
             var projectManagerName = (project.ProjectManager != null)
                 ? $"{project.ProjectManager.FirstName} {project.ProjectManager.LastName}"
                 : "No Manager";
 
-         
             return new ProjectDTO
             {
                 ProjectNumber = project.ProjectNumber,
@@ -37,12 +34,13 @@ namespace Domain.Factories
             };
         }
 
+
         public static IEnumerable<ProjectDTO> ToDTOList(IEnumerable<ProjectEntity> projects)
         {
             return projects.Select(ToDTO);
         }
 
-       
+
         public static ProjectEntity ToEntity(ProjectRegistrationForm projectForm)
         {
             return new ProjectEntity
@@ -57,8 +55,10 @@ namespace Domain.Factories
                 {
                     StartDate = projectForm.StartDate,
                     EndDate = projectForm.EndDate
-                }
+                },
+                ProjectManagerId = projectForm.ProjectManagerId // Kontrollera att detta sätts korrekt
             };
         }
+
     }
 }

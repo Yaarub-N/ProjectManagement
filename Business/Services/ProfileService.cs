@@ -31,6 +31,24 @@ namespace Business.Services
             }
         }
 
+        public async Task<ServiceResponse<IEnumerable<ProfileDTO>>> GetAllProfilesAsync()
+        {
+            try
+            {
+                var profiles = await _profileRepository.GetAllAsync(); 
+                if (profiles == null || !profiles.Any())
+                    return new ServiceResponse<IEnumerable<ProfileDTO>>(null!, false, "No profiles found.");
+
+                var profileDTOs = ProfileFactory.ToDTOList(profiles); 
+                return new ServiceResponse<IEnumerable<ProfileDTO>>(profileDTOs, true);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<IEnumerable<ProfileDTO>>(null!, false, $"Something went wrong: {e.Message}");
+            }
+        }
+
+
         public async Task<ServiceResponse<ProfileDTO>> GetProfileByIdAsync(int profileId)
         {
             try

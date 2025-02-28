@@ -30,6 +30,23 @@ namespace Business.Services
             }
         }
 
+        public async Task<ServiceResponse<IEnumerable<LocationDTO>>> GetAllLocationsAsync()
+        {
+            try
+            {
+                var locations = await _locationRepository.GetAllAsync(); 
+                if (locations == null || !locations.Any())
+                    return new ServiceResponse<IEnumerable<LocationDTO>>(null!, false, "No locations found.");
+
+                var locationDTOs = LocationFactory.ToDTOList(locations);
+                return new ServiceResponse<IEnumerable<LocationDTO>>(locationDTOs, true);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<IEnumerable<LocationDTO>>(null!, false, $"Something went wrong: {e.Message}");
+            }
+        }
+
         public async Task<ServiceResponse<LocationDTO>> GetLocationByIdAsync(int locationId)
         {
             try

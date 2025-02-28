@@ -31,5 +31,10 @@ namespace Domain.Factories
                 RoleId = employeeDTO.RoleId
             };
         }
+
+        public static IEnumerable<EmployeeDTO> ToDTOList(IEnumerable<EmployeeEntity> customers)
+        {
+            return customers.Select(ToDTO);
+        }
     }
 }

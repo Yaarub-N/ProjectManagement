@@ -30,7 +30,22 @@ namespace Business.Services
                 return new ServiceResponse<StatusDTO>(null!, false, $"Something went wrong: {e.Message}");
             }
         }
+    
+        public async Task<ServiceResponse<IEnumerable<StatusDTO>>> GetAllStatusesAsync()
+        {
+            try
+            {
+                var statuses = await _statusRepository.GetAllAsync();
+                if (!statuses.Any())
+                    return new ServiceResponse<IEnumerable<StatusDTO>>(null!, false, "No statuses found.");
 
+                return new ServiceResponse<IEnumerable<StatusDTO>>(StatusFactory.ToDTOList(statuses), true);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<IEnumerable<StatusDTO>>(null!, false, $"Something went wrong: {e.Message}");
+            }
+        }
 
         public async Task<ServiceResponse<StatusDTO>> GetStatusByIdAsync(int statusId)
         {

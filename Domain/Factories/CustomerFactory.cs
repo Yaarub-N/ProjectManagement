@@ -5,7 +5,6 @@ namespace Domain.Factories
 {
     public static class CustomerFactory
     {
-        // Konvertera CustomerEntity till CustomerDTO
         public static CustomerDTO ToDTO(CustomerEntity customer)
         {
             return new CustomerDTO
@@ -15,10 +14,11 @@ namespace Domain.Factories
                 ProfileEmail = customer.Profile?.ContactEmail ?? "No email",
                 AddressStreet = customer.Address?.Street ?? "Unknown Street",
                 AddressCity = customer.Address?.Location?.City ?? "Unknown City",
-                AddressPostalCode = customer.Address?.Location?.PostalCode ?? "Unknown PostalCode", 
+                AddressPostalCode = customer.Address?.Location?.PostalCode ?? "Unknown PostalCode",
                 AddressCountry = customer.Address?.Location?.Country ?? "Unknown Country"
             };
         }
+
         public static CustomerEntity ToEntity(CustomerDTO customerDTO)
         {
             return new CustomerEntity
@@ -41,6 +41,7 @@ namespace Domain.Factories
                 }
             };
         }
+
         public static IEnumerable<CustomerDTO> ToDTOList(IEnumerable<CustomerEntity> customers)
         {
             return customers.Select(ToDTO);

@@ -31,6 +31,41 @@ namespace Business.Services
             }
         }
 
+        public async Task<ServiceResponse<ServiceDTO>> GetServiceByIdAsync(int serviceId)
+        {
+            try
+            {
+                if (serviceId <= 0)
+                    return new ServiceResponse<ServiceDTO>(null!, false, "Invalid service ID.");
+
+                var service = await _serviceRepository.GetAsync(s => s.Id == serviceId);
+                if (service == null)
+                    return new ServiceResponse<ServiceDTO>(null!, false, "Service not found.");
+
+                return new ServiceResponse<ServiceDTO>(ServiceFactory.ToDTO(service), true);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<ServiceDTO>(null!, false, $"Something went wrong: {e.Message}");
+            }
+        }
+
+        public async Task<ServiceResponse<IEnumerable<ServiceDTO>>> GetAllServicesAsync()
+        {
+            try
+            {
+                var services = await _serviceRepository.GetAllAsync();
+                if (!services.Any())
+                    return new ServiceResponse<IEnumerable<ServiceDTO>>(null!, false, "No services found.");
+
+                return new ServiceResponse<IEnumerable<ServiceDTO>>(ServiceFactory.ToDTOList(services), true);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<IEnumerable<ServiceDTO>>(null!, false, $"Something went wrong: {e.Message}");
+            }
+        }
+
         public async Task<ServiceResponse<ServiceDTO>> UpdateServiceAsync(int serviceId, ServiceDTO serviceDTO)
         {
             try

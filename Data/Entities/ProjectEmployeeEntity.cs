@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+     //chat gpt4o
 namespace Data.Entities
 {
     public class ProjectEmployeeEntity

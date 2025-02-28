@@ -33,6 +33,20 @@ namespace Business.Services
         }
 
 
+        public async Task<ServiceResponse<IEnumerable<CustomerDTO>>> GetAllCustomersAsync()
+        {
+            try
+            {
+                var customers = await _customerRepository.GetAllAsync();
+                var customerDTOs = CustomerFactory.ToDTOList(customers);
+                return new ServiceResponse<IEnumerable<CustomerDTO>>(customerDTOs, true);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<IEnumerable<CustomerDTO>>(null!, false, $"Something went wrong: {e.Message}");
+            }
+        }
+
         public async Task<ServiceResponse<CustomerDTO>> GetCustomerByIdAsync(int customerId)
         {
             try

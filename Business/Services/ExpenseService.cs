@@ -6,14 +6,9 @@ using Domain.ServiceResponses;
 
 namespace Business.Services
 {
-    public class ExpenseService : IExpenseService
+    public class ExpenseService(IExpenseRepository expenseRepository) : IExpenseService
     {
-        private readonly IExpenseRepository _expenseRepository;
-
-        public ExpenseService(IExpenseRepository expenseRepository)
-        {
-            _expenseRepository = expenseRepository;
-        }
+        private readonly IExpenseRepository _expenseRepository = expenseRepository;
 
         public async Task<ServiceResponse<ExpenseDTO>> CreateExpenseAsync(ExpenseDTO expenseDTO)
         {
