@@ -9,7 +9,10 @@ public class AddressRepository(DataContext context) : BaseRepository<AddressEnti
 {
     public override async Task<IEnumerable<AddressEntity>> GetAllAsync()
     {
-        return await _db.Include(a => a.Location) // Include related location data if needed
+        return await _db
+                        .Include(a => a.Location) 
                        .ToListAsync();
+                     
     }
+ 
 }
